@@ -17,7 +17,6 @@ client.once('ready', () => {
 client.on('message', async message => {
     if(!message.content.startsWith(prefix) || message.author.bot) return;
     
-    //not sure what this does i found it somewhere
     const args = message.content.slice(prefix.length).split(/ + /);
 
     //accounts for capital letters in command
