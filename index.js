@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const axios = require('axios');
 require('dotenv').config();
 const token = process.env.TOKEN;
+const key = process.env.KEY;
 
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES"]
@@ -28,7 +29,7 @@ client.on('message', async message => {
 
     if(command === 'bbaits') {
         let getBuses = async () => {
-            let response = await axios.get('https://mbus.ltp.umich.edu/bustime/api/v3/getvehicles?key=jbxA7tRCrrgLFKCHiTy3gykMJ&rt=BB&format=json');
+            let response = await axios.get(`https://mbus.ltp.umich.edu/bustime/api/v3/getvehicles?key=${key}&rt=BB&format=json`);
 
             //find all vehicles
             let vehicles = response['data']['bustime-response']['vehicle'];
@@ -55,7 +56,7 @@ client.on('message', async message => {
         if (buses === 1) {
             message.channel.send(`There aren't any ${command} buses running right now.`);
         }
-        else {s
+        else {
             message.channel.send("Your Bursley Baits buses are at locations: ");
             for (let i = 0; i < buses.length; i++) {
                 message.channel.send(`${buses[i]}`);
@@ -68,7 +69,7 @@ client.on('message', async message => {
 //same code as above, trying to figure out how to do it based on whatever the input is so i don't have to copy
     if(command === 'northwood') {
         let getBus = async () => {
-            let response = await axios.get('https://mbus.ltp.umich.edu/bustime/api/v3/getvehicles?key=jbxA7tRCrrgLFKCHiTy3gykMJ&rt=NW&format=json');
+            let response = await axios.get(`https://mbus.ltp.umich.edu/bustime/api/v3/getvehicles?key=${key}&rt=NW&format=json`);
 
             //find all vehicles
             let vehicles = response['data']['bustime-response']['vehicle'];
