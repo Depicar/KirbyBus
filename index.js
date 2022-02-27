@@ -32,27 +32,30 @@ client.on('message', async message => {
 
             //find all vehicles
             let vehicles = response['data']['bustime-response']['vehicle'];
-            var size = Object.keys(vehicles).length;
-            //console.log(size);
-
-            //log all vehicle locations
-            let location = [[vehicles[0]['lat'], vehicles[0]['lon']]];
-            for (let i = 1; i < size; i++) {
-                location.push([vehicles[i]['lat'], vehicles[i]['lon']]);
+            
+            //check if there are no buses running
+            if (vehicles === undefined) {
+                return 1;
             }
 
-            //console.log(location);
-            return location;
+            var size = Object.keys(vehicles).length;
+
+            //log all vehicle locations
+            let locations = [];
+            for (let i = 0; i < size; i++) {
+                locations.push([vehicles[i]['lat'], vehicles[i]['lon']]);
+            }
+
+            return locations;
 
         }
-        //send message, not sure if await is needed here
         let buses = await getBuses();
 
-        //check if any buses are actually running
-        if (buses.length === 0) {
-            message.channel.send("There aren't any buses running right now.");
+        //outside check if any buses are actually running
+        if (buses === 1) {
+            message.channel.send(`There aren't any ${command} buses running right now.`);
         }
-        else {
+        else {s
             message.channel.send("Your Bursley Baits buses are at locations: ");
             for (let i = 0; i < buses.length; i++) {
                 message.channel.send(`${buses[i]}`);
@@ -61,6 +64,7 @@ client.on('message', async message => {
         
         
     }
+
 //same code as above, trying to figure out how to do it based on whatever the input is so i don't have to copy
     if(command === 'northwood') {
         let getBus = async () => {
@@ -68,25 +72,28 @@ client.on('message', async message => {
 
             //find all vehicles
             let vehicles = response['data']['bustime-response']['vehicle'];
-            var size = Object.keys(vehicles).length;
-            //console.log(size);
 
-            //log all vehicle locations
-            let location = [[vehicles[0]['lat'], vehicles[0]['lon']]];
-            for (let i = 1; i < size; i++) {
-                location.push([vehicles[i]['lat'], vehicles[i]['lon']]);
+            //check if there are no buses running
+            if (vehicles === undefined) {
+                return 1;
             }
 
-            //console.log(location);
-            return location;
+            var size = Object.keys(vehicles).length;
+
+            //log all vehicle locations
+            let locations = [];
+            for (let i = 0; i < size; i++) {
+                locations.push([vehicles[i]['lat'], vehicles[i]['lon']]);
+            }
+
+            return locations;
 
         }
-        //send message, not sure if await is needed here
         let buses = await getBus();
 
         //check if any buses are actually running
-        if (buses.length === 0) {
-            message.channel.send("There aren't any buses running right now.");
+        if (buses === 1) {
+            message.channel.send(`There aren\'t any ${command} buses running right now.`);
         }
         else {
             message.channel.send("Your Northwood buses are at locations: ");
@@ -101,4 +108,4 @@ client.on('message', async message => {
 
 
 
-client.login(token);
+client.login('OTQyMjQ3Mjk4Mzc1NzUzNzk4.YghuLg.qieulU1crJth5c94b9Soazt3ZBM');
