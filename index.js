@@ -11,7 +11,7 @@ const prefix = '';
 
 
 client.once('ready', () => {
-    console.log('MuscleKirby GOOD');
+    console.log('KirbyBus GOOD');
 });
 
 client.on('message', async message => {
@@ -22,12 +22,12 @@ client.on('message', async message => {
     //accounts for capital letters in command
     const command = args.shift().toLowerCase();
 
-    if(command === 'lol') {
-        message.channel.send('you\'re lol');
+    if(command === 'ping') {
+        message.channel.send('pong!');
     }
 
     if(command === 'bbaits') {
-        let getBus = async () => {
+        let getBuses = async () => {
             let response = await axios.get('https://mbus.ltp.umich.edu/bustime/api/v3/getvehicles?key=jbxA7tRCrrgLFKCHiTy3gykMJ&rt=BB&format=json');
 
             //find all vehicles
@@ -46,7 +46,7 @@ client.on('message', async message => {
 
         }
         //send message, not sure if await is needed here
-        let buses = await getBus();
+        let buses = await getBuses();
 
         //check if any buses are actually running
         if (buses.length === 0) {
