@@ -108,4 +108,4 @@ client.on('message', async message => {
 
 
 
-client.login('OTQyMjQ3Mjk4Mzc1NzUzNzk4.YghuLg.qieulU1crJth5c94b9Soazt3ZBM');
+client.login(token);
