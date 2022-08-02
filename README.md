@@ -13,7 +13,7 @@ Currently, you are able to set a home location and inquire about bus times. Look
 **bus time BUS_LINE:** nearest bus to home location based on bus line
 
 
-**Location and Bus Abbreviations:**
+## Location and Bus Abbreviations:
 
 **Commuter North:** CN
 
