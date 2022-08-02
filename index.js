@@ -103,8 +103,21 @@ client.on('message', async message => {
     if(command === 'bus') {
         client.commands.get('bus').execute(message, args, busStopIds, home, selectedBus);
     }
+
+    //start reminders
+    if(command === 'startremind') {
+        //check bus time every 10 seconds
+        timerId = setInterval(function() {client.commands.get('reminder').execute(message, busStopIds, busLines, home, selectedBus) }, 10000);    
+    }
+
+    //stop reminders
+    if(command === 'stopremind') {
+        clearInterval(timerId);
+    }
 }
 )
+
+
 
 
 
