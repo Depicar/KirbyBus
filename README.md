@@ -4,31 +4,31 @@ Reminder bot for UofM buses
 ## How to Use:
 Currently, you are able to set a home location and inquire about bus times. Looking to add a more reminder-based system soon.
 
-**Commands:**
+## Commands:
 
-sethome HOME_LOCATION: sets home location
+**sethome HOME_LOCATION:** sets home location
 
-gethome: gets current home location
+**gethome:** gets current home location
 
-bus time BUS_LINE: nearest bus to home location based on bus line
+**bus time BUS_LINE:** nearest bus to home location based on bus line
 
 
 **Location and Bus Abbreviations:**
 
-Commuter North: CN
+**Commuter North:** CN
 
-Northwood: NW
+**Northwood:** NW
 
-Bursley Baits: BB
+**Bursley Baits:** BB
 
 
 
-CCTC Chemistry Building: cctcchem
+**CCTC Chemistry Building:** cctcchem
 
-CCTC Rotvig Musuem: cctcmuseum
+**CCTC Rotvig Musuem:** cctcmuseum
 
-Bursley Inbound: bursleyin
+**Bursley Inbound:** bursleyin
 
-Bursley Outbound: bursleyout
+**Bursley Outbound:** bursleyout
 
 
