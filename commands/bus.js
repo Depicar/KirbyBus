@@ -5,16 +5,57 @@ const key = process.env.KEY;
 
 //bus lines map (might be able to move to separate file)
 const busLines = new Map([
-    ["bbaits", 'BB'],
-    ["northwood", 'NW'],
-    ["commuternorth", 'CN'],
+    ["bb", 'BB'],
+    ["nw", 'NW'],
+    ["cn", 'CN'],
+    ["cs", 'CS'],
+    ['csx', 'CSX'],
+    ['mx', 'MX'],
+    ['ne', "NE"],
+    ['ws', "WS"],
+    ['wx', 'WX']
   ]);
 
 module.exports = {
     name: 'bus',
     description: "finds bus locations/predicts bus time based on home",
-    async execute(message, args, busStopIds, location) {
+    async execute(message, args, busStopIds, location, selectedBus) {
+        //for selected bus
+        if (args[0] && args[0] === 'time') {
+            if (selectedBus.length === 0) {
+                message.channel.send('Please set a bus line.');
+                return
+            }
+            let getPrediction = async () => {
+                let response = await axios.get(`https://mbus.ltp.umich.edu/bustime/api/v3/getpredictions?key=${key}&rt=${busLines.get(selectedBus)}&stpid=${busStopIds.get(location)}&format=json`)
+                let prediction = response['data']['bustime-response']['prd']
 
+                //for buses not running
+                if (prediction === undefined) {
+                    return -1;
+                }
+
+                return prediction[0]['prdctdn'];
+            }
+
+            let predictionByMin = await getPrediction();
+
+            //outside check for buses not running
+            if (predictionByMin === -1) {
+                message.channel.send(`There aren't any ${busLines.get(selectedBus)} buses running to your location right now.`);
+                return;
+            }
+            
+            //special case for 'DUE' response
+            if (predictionByMin === 'DUE') {
+                message.channel.send(`The ${busLines.get(selectedBus)} bus is DUE! RUN!`);
+                return;
+            }
+
+            message.channel.send(`A ${busLines.get(selectedBus)} bus is coming to you in ${predictionByMin} minutes!`);
+
+            return;
+        }
         //check if valid bus line, args.length check for when user types just 'bus'
         if (args.length === 0 || !busLines.has(args[0].toLowerCase())) {
             message.channel.send('Invalid bus line.');
@@ -42,7 +83,7 @@ module.exports = {
 
             //outside check for buses not running
             if (predictionByMin === -1) {
-                message.channel.send(`There aren't any ${busLines.get(inputBusLine)} buses running right now.`);
+                message.channel.send(`There aren't any ${busLines.get(inputBusLine)} buses running to your location right now.`);
                 return;
             }
             
@@ -84,7 +125,7 @@ module.exports = {
 
         //outside check if any buses are actually running
         if (buses === -1) {
-            message.channel.send(`There aren't any ${busLines.get(inputBusLine)} buses running right now.`);
+            message.channel.send(`There aren't any ${busLines.get(inputBusLine)} buses running to your location right now.`);
         }
         else {
             message.channel.send(`Your ${busLines.get(inputBusLine)} buses are at locations: `);

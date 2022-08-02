@@ -20,16 +20,50 @@ for(const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
+//bus lines map
+const busLines = new Map([
+    ["bb", 'BB'],
+    ["nw", 'NW'],
+    ["cn", 'CN'],
+    ["cs", 'CS'],
+    ['csx', 'CSX'],
+    ['mx', 'MX'],
+    ['ne', "NE"],
+    ['ws', "WS"],
+    ['wx', 'WX']
+  ]);
+
 //common stops map 
 const busStopIds = new Map([
-    ["cctcmuseum", "C251",],
+    //Commuter North (northbound)
+    ["crislercenter", "S001"],
+    ["transportationgate", "S003"],
+    ["facilitiesservices", "S004"],
+    ["greene/hoover", "S006"],
+    ["intramuralbuildingout", "S007"],
     ["cctcchem", "C250"],
+    ["couzenshall", "M305"],
+    ["markleyhall", "M313"],
+    ["taubmanout", "M315"],
+    ["cancercenterout", "M319"],
+    ["fullerroard", "M350"],
+    ["artarchitecture", "N552"],
+    ["cooleylabin", "N404"],
+    ["fxbout", "N406"],
+    ["fordbuilding", "N432"],
+    ["huronhubbardout", "N434"],
+
+    //Northwood
+    ["cctcmuseum", "C251"],
+    ["hubbardin", "N433"],
     ["bursleyin", "N407"],
-    ["bursleyout", "N408"],
+    ["bursleyout", "N408"]
 ]);
 
 //user current location
-var home = 'cctcmuseum';
+var home = '';
+//user current selected bus
+var selectedBus = '';
 
 //ready check
 client.once('ready', () => {
@@ -56,9 +90,18 @@ client.on('message', async message => {
         home = client.commands.get('sethome').execute(message, args, busStopIds);
     }
 
+    if (command === 'getbus') {
+        message.channel.send(`Your selected bus is currently ${selectedBus}!`);
+    }
+
+    //set selected bus
+    if(command === 'setbus') {
+        selectedBus = client.commands.get('setbus').execute(message, args, busLines);
+    }
+
     //specific bus line commands
     if(command === 'bus') {
-        client.commands.get('bus').execute(message, args, busStopIds, home);
+        client.commands.get('bus').execute(message, args, busStopIds, home, selectedBus);
     }
 }
 )
