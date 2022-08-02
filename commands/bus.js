@@ -7,6 +7,7 @@ const key = process.env.KEY;
 const busLines = new Map([
     ["bbaits", 'BB'],
     ["northwood", 'NW'],
+    ["commuternorth", 'CN'],
   ]);
 
 module.exports = {
