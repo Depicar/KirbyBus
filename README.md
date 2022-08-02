@@ -1,5 +1,6 @@
 # KirbyBus
-reminder bot for umich buses
+Reminder bot for UofM buses
+
 ## How to Use:
 Currently, you are able to set a home location and inquire about bus times. Looking to add a more reminder-based system soon.
 
