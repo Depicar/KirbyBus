@@ -107,7 +107,7 @@ client.on('message', async message => {
     //start reminders
     if(command === 'startremind') {
         //check bus time every 10 seconds
-        timerId = setInterval(function() {client.commands.get('reminder').execute(message, busStopIds, busLines, home, selectedBus) }, 10000);    
+        timerId = setInterval(function() {client.commands.get('reminder').execute(message, busStopIds, busLines, home, selectedBus) }, 60000);    
     }
 
     //stop reminders
