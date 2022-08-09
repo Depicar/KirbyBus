@@ -1,8 +1,11 @@
+const mongoose = require('mongoose');
+const userData = require('./userData');
 const Discord = require('discord.js');
 const axios = require('axios');
 require('dotenv').config();
 const token = process.env.TOKEN;
 const key = process.env.KEY;
+const pass = process.env.PASS;
 
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES"]
@@ -13,6 +16,7 @@ const prefix = '';
 
 //file reading
 const fs = require('fs');
+const testSchema = require('./userData');
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
 for(const file of commandFiles) {
@@ -66,8 +70,18 @@ var home = '';
 var selectedBus = '';
 
 //ready check
-client.once('ready', () => {
+client.on('ready', async () => {
     console.log('KirbyBus GOOD');
+    await mongoose.connect(pass || '', {
+        keepAlive: true,
+    })
+
+    setTimeout(async () => {
+        await new userData( {
+            _id: 'test',
+            busData: 'test2',
+        }).save()}, 1000)
+
 });
 
 //message comands
