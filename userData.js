@@ -9,6 +9,11 @@ const schema = new mongoose.Schema({
     busData: {
         type: String,
         required: true
+    },
+
+    stopData: {
+        type: String,
+        required: true
     }
 })
 

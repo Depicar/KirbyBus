@@ -17,6 +17,7 @@ const prefix = '';
 //file reading
 const fs = require('fs');
 const testSchema = require('./userData');
+const { db } = require('./userData');
 client.commands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands/').filter(file => file.endsWith('.js'));
 for(const file of commandFiles) {
@@ -76,12 +77,6 @@ client.on('ready', async () => {
         keepAlive: true,
     })
 
-    setTimeout(async () => {
-        await new userData( {
-            _id: 'test',
-            busData: 'test2',
-        }).save()}, 1000)
-
 });
 
 //message comands
@@ -96,21 +91,22 @@ client.on('message', async message => {
 
     //get home location
     if (command === 'gethome') {
-        message.channel.send(`Your home is currently at ${home}!`);
+        client.commands.get('gethome').execute(message);
     }
 
     //set home location 
     if(command === 'sethome') {
-        home = client.commands.get('sethome').execute(message, args, busStopIds);
+        client.commands.get('sethome').execute(message, args, busStopIds);
     }
 
+    //get selected bus
     if (command === 'getbus') {
-        message.channel.send(`Your selected bus is currently ${selectedBus}!`);
+        client.commands.get('getbus').execute(message);
     }
 
     //set selected bus
     if(command === 'setbus') {
-        selectedBus = client.commands.get('setbus').execute(message, args, busLines);
+        client.commands.get('setbus').execute(message, args, busLines);
     }
 
     //specific bus line commands
@@ -128,6 +124,18 @@ client.on('message', async message => {
     if(command === 'stopremind') {
         clearInterval(timerId);
     }
+
+    //test command for mongodb
+    // if (command === "lolgoon") {
+    //     message.channel.send(`yo you ${message.author.id}`);
+    //     setTimeout(async () => {
+    //         await userData.findOneAndUpdate( 
+    //             {_id: 'goonsa'} ,
+    //             {$set: {busData: 'bosing'}},
+    //             {upsert: true}
+    //         ).exec()}, 1000);
+
+    // }
 }
 )
 
