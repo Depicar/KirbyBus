@@ -11,11 +11,20 @@ module.exports = {
         );
         
         //add error message when none
-        if (line.length === 0) {
+        try {
+            line[0].stopData;
+        }
+        catch {
             message.channel.send("Please set a home.");
             return;
         }
-        message.channel.send(`Your home is currently at ${line}!`);
+
+        if (line[0].stopData === undefined) {
+            message.channel.send("Please set a home.");
+            return;  
+        }
+        
+        message.channel.send(`Your home is currently at ${line[0].stopData}!`);
         
         return;
 

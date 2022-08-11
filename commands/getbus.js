@@ -9,13 +9,21 @@ module.exports = {
         var line = await userData.find( 
             {_id: message.author.id} ,
         );
-        
-        if (line.length === 0) {
+                
+        try {
+            line[0].busData;
+        }
+        catch {
             message.channel.send("Please set a bus line.");
             return;
         }
 
-        message.channel.send(`Your bus line is currently ${line}!`);
+        if (line[0].busData === undefined) {
+            message.channel.send("Please set a bus line.");
+            return;  
+        }
+
+        message.channel.send(`Your bus line is currently ${line[0].busData}!`);
 
         return;
 

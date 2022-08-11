@@ -2,15 +2,45 @@ const Discord = require('discord.js');
 const axios = require('axios');
 require('dotenv').config();
 const key = process.env.KEY;
+const userData = require('../userData');
+
 
   module.exports = {
     name: 'reminder',
     description: "called every 10 seconds to remind user",
-    async execute(message, busStopIds, busLines, home, selectedBus) {
-        if (home.length === 0 || selectedBus.length === 0) {
-            message.channel.send('No set home or set bus line');
-            return
+    async execute(message, busStopIds, busLines, tempTime) {
+
+        //find response from db
+        var line = await userData.find( 
+            {_id: message.author.id} ,
+        );
+
+        //make sure data exists
+        try {
+            line[0].busData;
         }
+        catch {
+            message.channel.send("Please set a home and bus line.");
+            return;
+        }
+        
+        if (line[0].busData === undefined) {
+            message.channel.send("Please set a bus line.");
+            return;  
+        }
+
+        if (line[0].stopData === undefined) {
+            message.channel.send("Please set a home.");
+            return;  
+        }
+
+        let home = line[0].stopData;
+        let selectedBus = line[0].busData
+
+        // if (home.length === 0 || selectedBus.length === 0) {
+        //     message.channel.send('No set home or set bus line');
+        //     return
+        // }
 
         let getPrediction = async () => {
             let response = await axios.get(`https://mbus.ltp.umich.edu/bustime/api/v3/getpredictions?key=${key}&rt=${busLines.get(selectedBus)}&stpid=${busStopIds.get(home)}&format=json`)
@@ -25,6 +55,12 @@ const key = process.env.KEY;
         }
 
         let predictionByMin = await getPrediction();
+        
+        if (predictionByMin === tempTime[0]) {
+            return;
+        }
+        
+        tempTime[0] = predictionByMin;
 
         if (predictionByMin === -1) {
             message.channel.send(`There aren't any ${busLines.get(selectedBus)} buses running to your home right now.`);

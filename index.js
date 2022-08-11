@@ -65,10 +65,9 @@ const busStopIds = new Map([
     ["bursleyout", "N408"]
 ]);
 
-//user current location
-var home = '';
-//user current selected bus
-var selectedBus = '';
+//time array for reminder function
+var tempTime = ["temp"];
+
 
 //ready check
 client.on('ready', async () => {
@@ -111,13 +110,13 @@ client.on('message', async message => {
 
     //specific bus line commands
     if(command === 'bus') {
-        client.commands.get('bus').execute(message, args, busStopIds, home, selectedBus);
+        client.commands.get('bus').execute(message, args, busStopIds, busLines);
     }
 
     //start reminders
     if(command === 'startremind') {
         //check bus time every 10 seconds
-        timerId = setInterval(function() {client.commands.get('reminder').execute(message, busStopIds, busLines, home, selectedBus) }, 60000);    
+        timerId = setInterval(function() {client.commands.get('reminder').execute(message, busStopIds, busLines, tempTime) }, 10000);    
     }
 
     //stop reminders
