@@ -55,18 +55,29 @@ const userData = require('../userData');
         }
 
         let predictionByMin = await getPrediction();
-        
-        if (predictionByMin === tempTime[0]) {
-            return;
-        }
-        
-        tempTime[0] = predictionByMin;
 
+        //check bus exists (will repeat if none)
         if (predictionByMin === -1) {
             message.channel.send(`There aren't any ${busLines.get(selectedBus)} buses running to your home right now.`);
             return;
         }
 
+        //prevents repeat messages
+        if (predictionByMin === tempTime[0]) {
+            return;
+        }
+        
+        //next bus message
+        if (tempTime[0] === 'DUE') {
+            message.channel.send(`The next ${busLines.get(selectedBus)} bus is coming in ${predictionByMin} minutes`);
+            tempTime[0] = predictionByMin;
+            return;
+        }
+
+        tempTime[0] = predictionByMin;
+
+
+        //current bus time
         if (predictionByMin === '10') {
             message.channel.send(`The ${busLines.get(selectedBus)} bus is coming in 10 minutes`);
             return;
