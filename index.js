@@ -5,7 +5,7 @@ const axios = require('axios');
 require('dotenv').config();
 const token = process.env.TOKEN;
 const key = process.env.KEY;
-const PASS = process.env.PASS;
+const pass = process.env.PASS;
 
 const client = new Discord.Client({
     intents: ["GUILDS", "GUILD_MESSAGES"]
@@ -72,7 +72,7 @@ var tempTime = ["temp"];
 //ready check
 client.on('ready', async () => {
     console.log('KirbyBus GOOD');
-    await mongoose.connect(PASS || '', {
+    await mongoose.connect(pass || '', {
         keepAlive: true,
     })
 
