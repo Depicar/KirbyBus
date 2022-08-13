@@ -65,8 +65,8 @@ const busStopIds = new Map([
     ["bursleyout", "N408"]
 ]);
 
-//time array for reminder function
-var tempTime = ["temp"];
+//timerids
+intervals = new Map();
 
 
 //ready check
@@ -116,12 +116,13 @@ client.on('message', async message => {
     //start reminders
     if(command === 'startremind') {
         //check bus time every 10 seconds
-        timerId = setInterval(function() {client.commands.get('reminder').execute(message, busStopIds, busLines, tempTime) }, 10000);    
+
+        intervals.set(message.author.id, setInterval(function() {client.commands.get('reminder').execute(message, busStopIds, busLines) }, 10000));  
     }
 
     //stop reminders
     if(command === 'stopremind') {
-        clearInterval(timerId);
+        clearInterval(intervals.get(message.author.id));
     }
 
     //test command for mongodb

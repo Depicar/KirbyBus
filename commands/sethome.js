@@ -19,6 +19,13 @@ module.exports = {
             {upsert: true}
         ).exec();
 
+        //set prediction time
+        await userData.findOneAndUpdate( 
+            {_id: message.author.id} ,
+            {$set: {remindData: 'DUE'}},
+            {upsert: true}
+        ).exec();
+
         return;
 
     }

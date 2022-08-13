@@ -8,7 +8,7 @@ const userData = require('../userData');
   module.exports = {
     name: 'reminder',
     description: "called every 10 seconds to remind user",
-    async execute(message, busStopIds, busLines, tempTime) {
+    async execute(message, busStopIds, busLines) {
 
         //find response from db
         var line = await userData.find( 
@@ -58,39 +58,55 @@ const userData = require('../userData');
 
         //check bus exists (will repeat if none)
         if (predictionByMin === -1) {
-            message.channel.send(`There aren't any ${busLines.get(selectedBus)} buses running to your home right now.`);
+            message.channel.send("<@" + message.author.id + ">" + ` There aren't any ${busLines.get(selectedBus)} buses running to your home right now.`);
             return;
         }
 
         //prevents repeat messages
-        if (predictionByMin === tempTime[0]) {
+        var line = await userData.find( 
+            {_id: message.author.id} ,
+        );
+
+        tempTime = line[0].remindData;
+
+        if (predictionByMin === tempTime) {
             return;
         }
         
         //next bus message
-        if (tempTime[0] === 'DUE') {
-            message.channel.send(`The next ${busLines.get(selectedBus)} bus is coming in ${predictionByMin} minutes`);
-            tempTime[0] = predictionByMin;
+        if (tempTime === 'DUE') {
+            message.channel.send("<@" + message.author.id + ">" +  ` The next ${busLines.get(selectedBus)} bus is coming in ${predictionByMin} minutes`);
+
+            await userData.findOneAndUpdate( 
+                {_id: message.author.id} ,
+                {$set: {remindData: predictionByMin}},
+                {upsert: true}
+            ).exec();
+
             return;
         }
 
-        tempTime[0] = predictionByMin;
+        await userData.findOneAndUpdate( 
+            {_id: message.author.id} ,
+            {$set: {remindData: predictionByMin}},
+            {upsert: true}
+        ).exec();
 
 
         //current bus time
         if (predictionByMin === '10') {
-            message.channel.send(`The ${busLines.get(selectedBus)} bus is coming in 10 minutes`);
+            message.channel.send("<@" + message.author.id + ">" +  ` The ${busLines.get(selectedBus)} bus is coming in 10 minutes`);
             return;
         }
 
         if (predictionByMin === '5') {
-            message.channel.send(`The ${busLines.get(selectedBus)} bus is coming in 5 minutes`);
+            message.channel.send("<@" + message.author.id + ">" +  ` The ${busLines.get(selectedBus)} bus is coming in 5 minutes`);
             return;
         }
 
         //special case for 'DUE' response
         if (predictionByMin === 'DUE') {
-            message.channel.send(`The ${busLines.get(selectedBus)} bus is DUE! RUN!`);
+            message.channel.send("<@" + message.author.id + ">" + ` The ${busLines.get(selectedBus)} bus is DUE! RUN!`);
             return;
         }
         

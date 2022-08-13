@@ -14,6 +14,10 @@ const schema = new mongoose.Schema({
     stopData: {
         type: String,
         required: true
+    },
+
+    remindData: {
+        type: String
     }
 })
 
